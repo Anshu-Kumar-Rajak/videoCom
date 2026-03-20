@@ -1,0 +1,20 @@
+{
+  "name": "videocom",
+  "version": "1.0.0",
+  "description": "This is a Similar web app like youtube",
+  "license": "ISC",
+  "author": "Anshu",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "mongoose": "^9.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14",
+    "prettier": "^3.8.1"
+  }
+}
