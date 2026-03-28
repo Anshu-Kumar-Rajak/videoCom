@@ -9,7 +9,7 @@
 // }
 
 // 2nd Method
-const asyncHandler = (fn)=> (req,res,next)=>{
+const asyncHandler = (fn)=> (req,res,next)=>{ //no need to use return keyword as we are using arrow function and it will return the promise automatically
     Promise.resolve(fn(req,res,next)).catch((err)=>next(err));
 }
 
