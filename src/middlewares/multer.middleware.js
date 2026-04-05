@@ -7,7 +7,7 @@ const storage = multer.diskStorage({ // diskStorage is a method provided by mult
     },
     filename: function (req,file,cb){
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9); // Math.round(Math.random() * 1E9) is used to generate a random number between 0 and 1E9 to ensure uniqueness
-        cb(null, file.originalname.split('.')[0] + '-' + uniqueSuffix + "-" + file.originalname.split('.')[1]) // cb is a callback function that takes an error and the filename as arguments. In this case, we are passing null for the error and a unique filename that consists of the original filename (without the extension), a unique suffix, and the original file extension.   
+        cb(null, file.originalname.split('.')[0] + '-' + uniqueSuffix + "." + file.originalname.split('.')[1]) // cb is a callback function that takes an error and the filename as arguments. In this case, we are passing null for the error and a unique filename that consists of the original filename (without the extension), a unique suffix, and the original file extension.   
     }
 })
 

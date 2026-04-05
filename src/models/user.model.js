@@ -1,6 +1,6 @@
-import mongoose, { Schema } from 'mongoose';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import mongoose, { Schema } from "mongoose";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const userSchema = new Schema(
   {
@@ -8,7 +8,7 @@ const userSchema = new Schema(
       type: String,
       required: true,
       unique: true,
-      trime: true,
+      trim: true,
       lowercase: true,
       index: true,
     },
@@ -28,8 +28,7 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true,
-      trim: true,
-      lowercase: true,
+      trim: true
     },
     avatar: {
       type: String,
@@ -40,9 +39,9 @@ const userSchema = new Schema(
     },
     watchHistory: {
       type: [Schema.Types.ObjectId],
-      ref: 'Video',
+      ref: "Video",
     },
-    refereshToken: {
+    refreshToken: {
       type: String,
     },
   },
@@ -51,15 +50,15 @@ const userSchema = new Schema(
   }
 );
 
-userSchema.pre('save', async function () {
-  if (this.isModified('password')) {
+userSchema.pre("save", async function () {
+  if (this.isModified("password")) {
+    // isModified() method is used to check if the password field has been modified before hashing it. This ensures that the password is only hashed when it is initially set or when it is updated, preventing unnecessary hashing on every save operation.
     this.password = await bcrypt.hash(this.password, 10);
   }
 });
 
 userSchema.methods.ispasswordCorrect = async function (password) {
   return await bcrypt.compare(password, this.password);
-  next();
 };
 
 userSchema.methods.generateAccesstoken = function () {
@@ -72,7 +71,7 @@ userSchema.methods.generateAccesstoken = function () {
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
-      expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
+      expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
     }
   );
 };
@@ -81,7 +80,6 @@ userSchema.methods.getRefeshToken = function () {
   return jwt.sign(
     {
       _id: this.id,
-
     },
     process.env.REFRESH_TOKEN_SECRET,
     {
@@ -90,4 +88,4 @@ userSchema.methods.getRefeshToken = function () {
   );
 };
 
-export const User = moongoose.model('User', userSchema);
+export const User = mongoose.model("User", userSchema);
