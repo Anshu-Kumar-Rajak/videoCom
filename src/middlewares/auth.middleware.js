@@ -1,5 +1,7 @@
-import { ApiError } from "../utils/ApiError";
-import { asyncHandler } from "../utils/asyncHandler";
+import { ApiError } from "../utils/ApiError.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import jwt from "jsonwebtoken";
+import {User} from "../models/user.model.js";
 
 export const verifyJWT = asyncHandler(async(req, res, next) =>{
     const token = req.cookies?.accessToken || req.headers('Authorization')?.replace('Bearer ', ''); // We are trying to retrieve the JWT token from either the cookies (accessToken) or the Authorization header (Bearer token). The optional chaining operator (?.) is used to safely access the properties without throwing an error if they are undefined.
@@ -8,14 +10,15 @@ export const verifyJWT = asyncHandler(async(req, res, next) =>{
         throw new ApiError(401, "Unauthorized request")
     }
 
-    const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET); // We are using the jwt.verify() method to verify the token using the secret key stored in the environment variable ACCESS_TOKEN_SECRET. If the token is valid, it will return the decoded token payload.
+    
+    const decodedToken = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET); // We are using the jwt.verify() method to verify the token using the secret key stored in the environment variable ACCESS_TOKEN_SECRET. If the token is valid, it will return the decoded token payload.
 
     if(!decodedToken){
         throw new ApiError(401, "Unauthorized request")
     }
-
-    const user = await User.findById(decodedToken.userId?.select("-password -refreshToken")); // We are querying the database to find the user associated with the decoded token's userId. The select() method is used to exclude the password and refreshToken fields from the returned user object for security reasons.
-
+    console.log(decodedToken);
+    const user = await User.findById(decodedToken._id).select("-password -refreshToken"); // We are querying the database to find the user associated with the decoded token's userId. The select() method is used to exclude the password and refreshToken fields from the returned user object for security reasons.
+    console.log(user);
     if(!user){
         throw new ApiError(401, "Unauthorized request")
     }
