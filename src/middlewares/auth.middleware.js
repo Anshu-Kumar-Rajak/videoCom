@@ -16,9 +16,7 @@ export const verifyJWT = asyncHandler(async(req, res, next) =>{
     if(!decodedToken){
         throw new ApiError(401, "Unauthorized request")
     }
-    console.log(decodedToken);
     const user = await User.findById(decodedToken._id).select("-password -refreshToken"); // We are querying the database to find the user associated with the decoded token's userId. The select() method is used to exclude the password and refreshToken fields from the returned user object for security reasons.
-    console.log(user);
     if(!user){
         throw new ApiError(401, "Unauthorized request")
     }
