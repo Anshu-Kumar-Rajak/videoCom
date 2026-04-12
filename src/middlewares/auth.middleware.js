@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import {User} from "../models/user.model.js";
 
 export const verifyJWT = asyncHandler(async(req, res, next) =>{
-    const token = req.cookies?.accessToken || req.headers('Authorization')?.replace('Bearer ', ''); // We are trying to retrieve the JWT token from either the cookies (accessToken) or the Authorization header (Bearer token). The optional chaining operator (?.) is used to safely access the properties without throwing an error if they are undefined.
+    const token = req.cookies?.accessToken || req.header('Authorization')?.replace('Bearer ', ''); // We are trying to retrieve the JWT token from either the cookies (accessToken) or the Authorization header (Bearer token). The optional chaining operator (?.) is used to safely access the properties without throwing an error if they are undefined.
 
     if(!token){
         throw new ApiError(401, "Unauthorized request")
